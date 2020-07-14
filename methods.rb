@@ -30,4 +30,22 @@ module Enumerable
     end
     new_array
   end
+
+  def my_all?
+    my_each do |item|
+      if block_given?
+        if yield(item) == false
+          return false
+        elsif item == last
+          return true
+        end
+      else
+        if item == false || item == nil
+          return false
+        elsif item == last
+          return true
+        end
+      end
+    end
+  end
 end
