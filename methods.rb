@@ -9,4 +9,13 @@ module Enumerable
     end
     self
   end
+  def my_each_with_index
+    i = 0
+    while i < self.size
+      yield(self[i], i)
+      i += 1
+    end
+  end  
 end
+
+p [1,2,3].my_each_with_index {|item, index| puts "The value is #{item} an its index is #{index}"}
