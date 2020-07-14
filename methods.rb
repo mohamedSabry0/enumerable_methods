@@ -18,4 +18,16 @@ module Enumerable
     end
     self
   end
+
+  def my_select
+    new_array = []
+    current_index = 0
+    my_each do |item|
+      if yield(item)
+        new_array[current_index] = item
+        current_index += 1
+      end
+    end
+    new_array
+  end
 end
