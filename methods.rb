@@ -83,9 +83,27 @@ module Enumerable
 
   def my_inject(*args)
     if block_given?
-      memo = args[0] unless args.lenght.zero?
+      memo = args[0] unless args.length.zero?
       my_each do |item|
-        memo = item unless 
-        memo = yield(memo,item)
-
+        if defined?(memo) == nil
+          memo = item
+        else
+          memo = yield(memo,item)
+        end
+      end
+    elsif args.length == 2
+      memo = args[0]
+      my_each do |item|
+        memo.send(args[1], item)
+      end
+    else
+      if defined?(memo) == nil
+        memo = item
+      else
+        memo.send(args[0], item)
+      end
+    end
+  end
 end
+
+p (5..10).my_inject(:+)
