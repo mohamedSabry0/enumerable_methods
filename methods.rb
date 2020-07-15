@@ -55,14 +55,15 @@ module Enumerable
     end
   end
 
-  def my_count(x)
+  def my_count(*args)
     counter = 0
     my_each do |item|
       counter += 1 if block_given? && yield(item)
-      if !block_given?
-        counter += 1        
+      counter += 1 if !block_given? && args.length == 1 && args[0] == item
+      counter += 1 if !block_given? 
       elsif 
-        
+        [2,3,4].my_count(2) {|x| x>3}
+        [].length
       end
       counter += 1 if x == item
        if 
