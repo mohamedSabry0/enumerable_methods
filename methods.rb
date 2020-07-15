@@ -58,15 +58,17 @@ module Enumerable
   def my_count(*args)
     counter = 0
     my_each do |item|
-      counter += 1 if block_given? && yield(item)
-      counter += 1 if !block_given? && args.length == 1 && args[0] == item
-      counter += 1 if !block_given? 
+      if block_given? && yield(item)
+        counter += 1
+      elsif !block_given? && args.length == 1 && args[0] == item
+        counter += 1
+      elsif !block_given? && args.length.zero?
+        counter += 1
       end
-      counter += 1 if x == item
-       if 
+      # counter += 1 if block_given? && yield(item)
+      # counter += 1 if !block_given? && args.length == 1 && args[0] == item
+      # counter += 1 if !block_given? && args.length.zero?
     end
     counter
-  end    
+  end
 end
-
-p [1,2,3].my_count(2)
