@@ -33,11 +33,19 @@ module Enumerable
 
   def my_all?
     my_each do |item|
-      return false if block_given? && yield(item) == false
+      return false if block_given? && [false, nil].include?(yield(item))
       return false if !block_given? && [false, nil].include?(item)
       return true if item == last
     end
   end
+
+  def my_any?
+    my_each do |item|
+      return true if block_given? && (yield(item) != false || yield(item) != nil)
+      return true if !block_given? && ![false, nil].include?(item)
+      return false if item == last
+    end
+  end
 end
 
-p [2,1,3].my_all?
+p [1,2,3].my_any? {|item| item > 4 }
