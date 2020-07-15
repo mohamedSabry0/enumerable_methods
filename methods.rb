@@ -61,9 +61,6 @@ module Enumerable
       counter += 1 if block_given? && yield(item)
       counter += 1 if !block_given? && args.length == 1 && args[0] == item
       counter += 1 if !block_given? 
-      elsif 
-        [2,3,4].my_count(2) {|x| x>3}
-        [].length
       end
       counter += 1 if x == item
        if 
