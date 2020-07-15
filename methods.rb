@@ -49,11 +49,26 @@ module Enumerable
 
   def my_none?
     my_each do |item|
-      return false if block_given? && yield(item)== true
+      return false if block_given? && yield(item) == true
       return false if !block_given? && item == true
       return true if item == last
     end
   end
+
+  def my_count(x)
+    counter = 0
+    my_each do |item|
+      counter += 1 if block_given? && yield(item)
+      if !block_given?
+        counter += 1        
+      elsif 
+        
+      end
+      counter += 1 if x == item
+       if 
+    end
+    counter
+  end    
 end
 
-p %w{ant bear cat}.none? { |word| word.length == 5 }
+p [1,2,3].my_count(2)
