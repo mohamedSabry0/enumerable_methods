@@ -58,16 +58,13 @@ module Enumerable
   def my_count(*args)
     counter = 0
     my_each do |item|
-      if block_given? && yield(item)
-        counter += 1
-      elsif !block_given? && args.length == 1 && args[0] == item
-        counter += 1
-      elsif !block_given? && args.length.zero?
+      if block_given?
+        counter += 1 if yield(item)
+      elsif !block_given? && args.length == 1
+        counter += 1 if args[0] == item
+      else
         counter += 1
       end
-      # counter += 1 if block_given? && yield(item)
-      # counter += 1 if !block_given? && args.length == 1 && args[0] == item
-      # counter += 1 if !block_given? && args.length.zero?
     end
     counter
   end
