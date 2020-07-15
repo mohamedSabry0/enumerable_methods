@@ -80,4 +80,12 @@ module Enumerable
       to_enum(:my_map)
     end
   end
+
+  def my_inject(*args)
+    if block_given?
+      memo = args[0] unless args.lenght.zero?
+      my_each do |item|
+        memo = item unless 
+        memo = yield(memo,item)
+
 end
