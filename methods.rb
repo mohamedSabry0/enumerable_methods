@@ -68,4 +68,16 @@ module Enumerable
     end
     counter
   end
+
+  def my_map
+    new_array = []
+    if block_given?
+      my_each_with_index do |item, index|
+        new_array[index] = yield(item)
+      end
+      new_array
+    else
+      to_enum(:my_map)
+    end
+  end
 end
