@@ -41,11 +41,19 @@ module Enumerable
 
   def my_any?
     my_each do |item|
-      return true if block_given? && (yield(item) != false || yield(item) != nil)
+      return true if block_given? && ![false, nil].include?(yield(item))
       return true if !block_given? && ![false, nil].include?(item)
       return false if item == last
     end
   end
+
+  def my_none?
+    my_each do |item|
+      return false if block_given? && yield(item)== true
+      return false if !block_given? && item == true
+      return true if item == last
+    end
+  end
 end
 
-p [1,2,3].my_any? {|item| item > 4 }
+p %w{ant bear cat}.none? { |word| word.length == 5 }
