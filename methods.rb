@@ -73,9 +73,14 @@ module Enumerable
     counter
   end
 
-  def my_map
+  def my_map(*args)
     new_array = []
-    if block_given?
+    if !args.empty?
+      my_each_with_index do |item, index|
+        new_array[index] = args[0].call(item)
+      end
+      new_array
+    elsif block_given?
       my_each_with_index do |item, index|
         new_array[index] = yield(item)
       end
@@ -145,9 +150,9 @@ end
 def multiply_els(array)
   array.my_inject(:*)
 end
-
+# proc_map = Proc.new { |i| i * i }
+# p [1,2,3].my_map(proc_map) {|i| i + i}
 # p multiply_els([2,4,5])
-
 # p [1,2,3].my_inject
 # rubocop:enable Metrics/ModuleLength
 # rubocop:enable Metrics/PerceivedComplexity
