@@ -95,6 +95,12 @@ module Enumerable
   symbol variable and store the result in the memo variable for the next operation
 2.4- return the memo variable  
 
+3  - check if we have block instead of symbol and an initial value
+3.1- set the memo to the initial value
+3.2- start looping through the elements of the collection
+3.3- in every iteration excute the block using memo and the current item of the collection
+     and store the result into the memo variable
+3.4
 =end
 
   def my_inject(*args)
@@ -115,25 +121,36 @@ module Enumerable
       memo
     end
     if args.length == 1
-      my_each do |item|
-        if defined?(memo) == nil
-          memo = item
-        else  
+      my_each_with_index do |_item, i|
+        if i == 0
+          memo = self[i]
+        else
           case args[0]
           when :+
-            memo += item 
+            # memo = 0
+            memo += self[i] 
           when :*
-            memo *= item
+            # memo = 1
+            memo *= self[i]
           when :-
-            memo -= item
+            # memo = 0
+            memo -= self[i]
           when :/
-            memo /= item
-          end    
+            # memo = 1
+            memo /= self[i]
+          end
         end
+      end
+      memo
+    end
+    if block_given? && args.length == 1
+      memo = args[0]
+      my_each do |item|
+        memo = yield(memo, item)
       end
       memo
     end
   end
 end
 
-p [1,2,3].my_inject(:+)
+p [1,4,3].my_inject(1){|sum, item| sum *= item}
