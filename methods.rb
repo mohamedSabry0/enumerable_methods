@@ -100,7 +100,6 @@ module Enumerable
           memo /= item
         end
       end
-      memo
     end
     if args.length == 1
       my_each_with_index do |_item, i|
@@ -123,16 +122,14 @@ module Enumerable
           end
         end
       end
-      memo
     end
     if block_given? && args.length == 1
       memo = args[0]
       my_each do |item|
         memo = yield(memo, item)
       end
-      memo
     end
-    return unless block_given? and args.empty?
+    return memo unless block_given? and args.empty?
 
     my_each_with_index do |_item, i|
       memo = if i.zero?
@@ -145,7 +142,13 @@ module Enumerable
   end
 end
 
-# p [1,2,3].my_inject() { |num, item| num += item }
+def multiply_els(array)
+  array.my_inject(:*)
+end
+
+# p multiply_els([2,4,5])
+
+# p [1,2,3].my_inject
 # rubocop:enable Metrics/ModuleLength
 # rubocop:enable Metrics/PerceivedComplexity
 # rubocop:enable Metrics/CyclomaticComplexity
