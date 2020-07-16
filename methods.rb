@@ -5,34 +5,46 @@
 # rubocop:disable Metrics/MethodLength
 module Enumerable
   def my_each
-    i = 0
-    loop do
-      yield(self[i])
-      i += 1
-      break if i == size
+    if block_given?
+      i = 0
+      loop do
+        yield(self[i])
+        i += 1
+        break if i == size
+      end
+      self
+    else
+      to_enum(:my_each)
     end
-    self
   end
 
   def my_each_with_index
-    i = 0
-    while i < size
-      yield(self[i], i)
-      i += 1
+    if block_given?
+      i = 0
+      while i < size
+        yield(self[i], i)
+        i += 1
+      end
+      self
+    else
+      to_enum(:my_each_with_index)
     end
-    self
   end
 
   def my_select
-    new_array = []
-    current_index = 0
-    my_each do |item|
-      if yield(item)
-        new_array[current_index] = item
-        current_index += 1
+    if block_given?
+      new_array = []
+      current_index = 0
+      my_each do |item|
+        if yield(item)
+          new_array[current_index] = item
+          current_index += 1
+        end
       end
+      new_array
+    else
+      to_enum(:my_select)
     end
-    new_array
   end
 
   def my_all?
