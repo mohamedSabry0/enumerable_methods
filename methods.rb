@@ -1,4 +1,8 @@
 # adding my_each method to enumerable module
+# rubocop:disable Metrics/ModuleLength
+# rubocop:disable Metrics/PerceivedComplexity
+# rubocop:disable Metrics/CyclomaticComplexity
+# rubocop:disable Metrics/MethodLength
 module Enumerable
   def my_each
     i = 0
@@ -81,54 +85,32 @@ module Enumerable
     end
   end
 
-=begin
-1  - check for existance of the operation symbol and the initial value
-1.1- store the initial value in accumulator variable (e.g memo variable)
-1.2- start looping through the elements of the collection
-1.3- in every iteration excute the given operation or the spicified operation with the 
-  symbol variable and store the result in the memo variable for the next operation
-
-2  - check if we don't have initial value but only symbol
-2.1- set the initial value to the first element of the array
-2.2- start looping through the elements of the collection
-2.3- in every iteration excute the given operation or the spicified operation with the 
-  symbol variable and store the result in the memo variable for the next operation
-2.4- return the memo variable  
-
-3  - check if we have block instead of symbol and an initial value
-3.1- set the memo to the initial value
-3.2- start looping through the elements of the collection
-3.3- in every iteration excute the block using memo and the current item of the collection
-     and store the result into the memo variable
-3.4
-=end
-
   def my_inject(*args)
     if args.length == 2
       memo = args[0]
       my_each do |item|
         case args[1]
         when :+
-          memo += item 
+          memo += item
         when :*
           memo *= item
         when :-
           memo -= item
         when :/
           memo /= item
-        end    
+        end
       end
       memo
     end
     if args.length == 1
       my_each_with_index do |_item, i|
-        if i == 0
+        if i.zero?
           memo = self[i]
         else
           case args[0]
           when :+
             # memo = 0
-            memo += self[i] 
+            memo += self[i]
           when :*
             # memo = 1
             memo *= self[i]
@@ -150,7 +132,21 @@ module Enumerable
       end
       memo
     end
+    return unless block_given? and args.empty?
+
+    my_each_with_index do |_item, i|
+      memo = if i.zero?
+               self[i]
+             else
+               yield(memo, self[i])
+             end
+    end
+    memo
   end
 end
 
-p [1,4,3].my_inject(1){|sum, item| sum *= item}
+# p [1,2,3].my_inject() { |num, item| num += item }
+# rubocop:enable Metrics/ModuleLength
+# rubocop:enable Metrics/PerceivedComplexity
+# rubocop:enable Metrics/CyclomaticComplexity
+# rubocop:enable Metrics/MethodLength
