@@ -81,29 +81,27 @@ module Enumerable
     end
   end
 
+=begin
+1  - check for existance of the operation symbol and the initial value
+1.1- store the initial value in accumulator variable (e.g memo variable)
+1.2- start looping through the elements of the collection
+1.3- in every iteration excute the given operation or the spicified operation with the 
+  symbol variable and store the result in the memo variable for the next operation
+1.4- return the memo variable
+
+2  - if we don't have initial value but only symbol
+
+=end
+
   def my_inject(*args)
-    if block_given?
-      memo = args[0] unless args.length.zero?
-      my_each do |item|
-        if defined?(memo) == nil
-          memo = item
-        else
-          memo = yield(memo,item)
-        end
-      end
-    elsif args.length == 2
+    if args.length == 2
       memo = args[0]
       my_each do |item|
-        memo.send(args[1], item)
-      end
-    else
-      if defined?(memo) == nil
-        memo = item
-      else
-        memo.send(args[0], item)
+        case args[1]
+        when 
       end
     end
   end
 end
 
-p (5..10).my_inject(:+)
+p [1,2,3,5].my_inject_block {|sum, num| sum = sum + num }
