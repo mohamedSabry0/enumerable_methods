@@ -87,9 +87,13 @@ module Enumerable
 1.2- start looping through the elements of the collection
 1.3- in every iteration excute the given operation or the spicified operation with the 
   symbol variable and store the result in the memo variable for the next operation
-1.4- return the memo variable
 
-2  - if we don't have initial value but only symbol
+2  - check if we don't have initial value but only symbol
+2.1- set the initial value to the first element of the array
+2.2- start looping through the elements of the collection
+2.3- in every iteration excute the given operation or the spicified operation with the 
+  symbol variable and store the result in the memo variable for the next operation
+2.4- return the memo variable  
 
 =end
 
@@ -98,10 +102,38 @@ module Enumerable
       memo = args[0]
       my_each do |item|
         case args[1]
-        when 
+        when :+
+          memo += item 
+        when :*
+          memo *= item
+        when :-
+          memo -= item
+        when :/
+          memo /= item
+        end    
       end
+      memo
+    end
+    if args.length == 1
+      my_each do |item|
+        if defined?(memo) == nil
+          memo = item
+        else  
+          case args[0]
+          when :+
+            memo += item 
+          when :*
+            memo *= item
+          when :-
+            memo -= item
+          when :/
+            memo /= item
+          end    
+        end
+      end
+      memo
     end
   end
 end
 
-p [1,2,3,5].my_inject_block {|sum, num| sum = sum + num }
+p [1,2,3].my_inject(:+)
