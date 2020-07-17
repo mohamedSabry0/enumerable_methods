@@ -76,18 +76,24 @@ module Enumerable
     end
   end
 
-  def my_any?
+  def my_any?(*args)
     my_each do |item|
       return true if block_given? && ![false, nil].include?(yield(item))
-      return true if !block_given? && ![false, nil].include?(item)
+      return true if args.empty? && !block_given? && ![false, nil].include?(item)
+      return true if !args.empty? && args[0].class == Regexp && args[0].match(item)
+      return true if !args.empty? && args[0].class == Class && item.is_a?(args[0])
+      return true if !args.empty? && ![Class, Regexp].include?(args[0].class) && args[0] == item
       return false if item == last
     end
   end
 
-  def my_none?
+  def my_none?(*args)
     my_each do |item|
       return false if block_given? && yield(item) == true
-      return false if !block_given? && item == true
+      return false if args.empty? && !block_given? && item == true
+      return false if !args.empty? && args[0].class == Regexp && args[0].match(item)
+      return false if !args.empty? && args[0].class == Class && item.is_a?(args[0])
+      return false if !args.empty? && ![Class, Regexp].include?(args[0].class) && args[0] == item
       return true if item == last
     end
   end
@@ -185,11 +191,8 @@ def multiply_els(array)
 end
 
 
-p ['dog', 1, 'rod'].my_all?(Numeric)
-p ['dog', 1, 'rod'].all?(Numeric)
-p %w[dog dog].all?('dog')
-p %w[dog dog].my_all?('dog')
-# p [1,2,3].my_inject
+p %w[dog door rod].none?("od")
+p %w[dog door rod].none?("od")
 # rubocop:enable Metrics/ModuleLength
 # rubocop:enable Metrics/PerceivedComplexity
 # rubocop:enable Metrics/CyclomaticComplexity
