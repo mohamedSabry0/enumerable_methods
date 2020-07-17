@@ -70,7 +70,7 @@ module Enumerable
       return false if block_given? && [false, nil].include?(yield(item))
       return false if !block_given? && [false, nil].include?(item)
       return false if args[0].class == Regexp && !args[0].match(item)
-      return false if args[0].class == Class && args[0] != item.class
+      return false if item == Class && !args[0].class.match(item)
       return true if item == last
     end
   end
@@ -183,7 +183,8 @@ def multiply_els(array)
   array.my_inject(:*)
 end
 
-p %w[dog door rod].my_all?(/o/)
+p [1, 1, 1].all?(String)
+p [1, 1, 1].my_all?(String)
 
 # p [1,2,3].my_inject
 # rubocop:enable Metrics/ModuleLength
