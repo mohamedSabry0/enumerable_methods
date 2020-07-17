@@ -3,11 +3,13 @@
 # rubocop:disable Metrics/PerceivedComplexity
 # rubocop:disable Metrics/CyclomaticComplexity
 # rubocop:disable Metrics/MethodLength
+# rubocop:disable Metrics/AbcSize
+# rubocop:disable Metrics/BlockNesting
 module Enumerable
   def my_each
     if block_given?
       if self.class == Range
-        new_array = self.to_a
+        new_array = to_a
         i = 0
         loop do
           yield(new_array[i])
@@ -15,7 +17,7 @@ module Enumerable
           break if i == size
         end
       elsif self.class == Hash
-        new_array = self.to_a
+        new_array = to_a
         i = 0
         loop do
           yield(new_array[i])
@@ -129,10 +131,10 @@ module Enumerable
     end
   end
 
-  def my_inject(*args, &block)
+  def my_inject(*args)
     yield if !block_given? && args.empty?
     if self.class == Range
-      new_array = self.to_a
+      new_array = to_a
       if args.length == 2
         memo = args[0]
         my_each do |item|
@@ -239,10 +241,9 @@ def multiply_els(array)
   array.my_inject(:*)
 end
 
-
-p (1..5).my_inject(2, :*)
-p (1..5).inject(2, :*)
 # rubocop:enable Metrics/ModuleLength
 # rubocop:enable Metrics/PerceivedComplexity
 # rubocop:enable Metrics/CyclomaticComplexity
 # rubocop:enable Metrics/MethodLength
+# rubocop:enable Metrics/AbcSize
+# rubocop:enable Metrics/BlockNesting
