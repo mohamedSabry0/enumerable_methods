@@ -6,11 +6,29 @@
 module Enumerable
   def my_each
     if block_given?
-      i = 0
-      loop do
-        yield(self[i])
-        i += 1
-        break if i == size
+      if self.class == Range
+        new_array = self.to_a
+        i = 0
+        loop do
+          yield(new_array[i])
+          i += 1
+          break if i == size
+        end
+      elsif self.class == Hash
+        new_array = self.to_a.flatten
+        i = 0
+        loop do
+          yield(new_array[i])
+          i += 1
+          break if i == size
+        end
+      elsif self.class == Array
+        i = 0
+        loop do
+          yield(self[i])
+          i += 1
+          break if i == size
+        end
       end
       self
     else
@@ -162,6 +180,9 @@ end
 def multiply_els(array)
   array.my_inject(:*)
 end
+
+p ({ one: "1", two: "2" }.my_each{ |w| puts "#{w}" })
+p ({ one: "1", two: "2" }.each{ |w| puts "#{w}" })
 # proc_map = Proc.new { |i| i * i }
 # p [1,2,3].my_map(proc_map) {|i| i + i}
 # p multiply_els([2,4,5])
