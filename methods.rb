@@ -39,8 +39,8 @@ module Enumerable
   def my_each_with_index
     if block_given?
       i = 0
-      while i < size
-        yield(self[i], i)
+      my_each do |item|
+        yield(item, i)
         i += 1
       end
       self
@@ -129,7 +129,60 @@ module Enumerable
     end
   end
 
-  def my_inject(*args)
+  def my_inject(*args, &block)
+    yield if !block_given? && args.empty?
+    if self.class == Range
+      new_array = self.to_a
+      if args.length == 2
+        memo = args[0]
+        my_each do |item|
+          case args[1]
+          when :+
+            memo += item
+          when :*
+            memo *= item
+          when :-
+            memo -= item
+          when :/
+            memo /= item
+          end
+        end
+      end
+      if args.length == 1
+        my_each_with_index do |_item, i|
+          if i.zero?
+            memo = new_array[i]
+          else
+            case args[0]
+            when :+
+              memo += new_array[i]
+            when :*
+              memo *= new_array[i]
+            when :-
+              memo -= new_array[i]
+            when :/
+              memo /= new_array[i]
+            end
+          end
+        end
+      end
+      if block_given? && args.length == 1
+        memo = args[0]
+        my_each do |item|
+          memo = yield(memo, item)
+        end
+      end
+      return memo unless block_given? and args.empty?
+
+      my_each_with_index do |_item, i|
+        memo = if i.zero?
+                 new_array[i]
+               else
+                 yield(memo, new_array[i])
+               end
+      end
+      return memo
+    end
     if args.length == 2
       memo = args[0]
       my_each do |item|
@@ -152,16 +205,12 @@ module Enumerable
         else
           case args[0]
           when :+
-            # memo = 0
             memo += self[i]
           when :*
-            # memo = 1
             memo *= self[i]
           when :-
-            # memo = 0
             memo -= self[i]
           when :/
-            # memo = 1
             memo /= self[i]
           end
         end
@@ -191,8 +240,8 @@ def multiply_els(array)
 end
 
 
-p %w[dog door rod].none?("od")
-p %w[dog door rod].none?("od")
+p (1..5).my_inject(2, :*)
+p (1..5).inject(2, :*)
 # rubocop:enable Metrics/ModuleLength
 # rubocop:enable Metrics/PerceivedComplexity
 # rubocop:enable Metrics/CyclomaticComplexity
