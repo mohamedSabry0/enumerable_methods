@@ -65,10 +65,12 @@ module Enumerable
     end
   end
 
-  def my_all?
+  def my_all?(*args)
     my_each do |item|
       return false if block_given? && [false, nil].include?(yield(item))
       return false if !block_given? && [false, nil].include?(item)
+      return false if args[0].class == Regexp && !args[0].match(item)
+      return false if args[0].class == Class && args[0] != item.class
       return true if item == last
     end
   end
@@ -181,11 +183,8 @@ def multiply_els(array)
   array.my_inject(:*)
 end
 
-p ({ one: "1", two: "2" }.my_each{ |w| puts w })
-p ({ one: "1", two: "2" }.each{ |w| puts w })
-# proc_map = Proc.new { |i| i * i }
-# p [1,2,3].my_map(proc_map) {|i| i + i}
-# p multiply_els([2,4,5])
+p %w[dog door rod].my_all?(/o/)
+
 # p [1,2,3].my_inject
 # rubocop:enable Metrics/ModuleLength
 # rubocop:enable Metrics/PerceivedComplexity
