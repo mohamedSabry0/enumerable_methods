@@ -69,8 +69,9 @@ module Enumerable
     my_each do |item|
       return false if block_given? && [false, nil].include?(yield(item))
       return false if !block_given? && [false, nil].include?(item)
-      return false if args[0].class == Regexp && !args[0].match(item)
-      return false if item == Class && !args[0].class.match(item)
+      return false if !args.empty? && args[0].class == Regexp && !args[0].match(item)
+      return false if !args.empty? && args[0].class == Class && !item.is_a?(args[0])
+      return false if !args.empty? && ![Class, Regexp].include?(args[0].class) && args[0] != item
       return true if item == last
     end
   end
@@ -183,9 +184,11 @@ def multiply_els(array)
   array.my_inject(:*)
 end
 
-p [1, 1, 1].all?(String)
-p [1, 1, 1].my_all?(String)
 
+p ['dog', 1, 'rod'].my_all?(Numeric)
+p ['dog', 1, 'rod'].all?(Numeric)
+p %w[dog dog].all?('dog')
+p %w[dog dog].my_all?('dog')
 # p [1,2,3].my_inject
 # rubocop:enable Metrics/ModuleLength
 # rubocop:enable Metrics/PerceivedComplexity
