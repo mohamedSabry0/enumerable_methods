@@ -1,6 +1,7 @@
 # enumerable_methods
 >Implementation of Ruby Enumerable methods.
-
+## Live Demo 
+[![Run on Repl.it](https://repl.it/badge/github/mohamedSabry0/enumerable_methods)](https://repl.it/github/mohamedSabry0/enumerable_methods)
 ## Built With
 
 - Ruby.
