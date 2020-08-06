@@ -50,7 +50,7 @@ describe Enumerable do
         end
       end
       context 'with a block' do
-        it 'returns enumerator' do
+        it 'returns same as original' do
           expect(array.my_each_with_index { |w, i| p i, w }).to eq(array.each_with_index { |w, i| p i, w })
         end
       end
@@ -62,7 +62,7 @@ describe Enumerable do
         end
       end
       context 'with a block' do
-        it 'returns enumerator' do
+        it 'returns same as original' do
           expect(hash.my_each_with_index { |w, i| p i, w }).to eq(hash.each_with_index { |w, i| p i, w })
         end
       end
@@ -74,8 +74,46 @@ describe Enumerable do
         end
       end
       context 'with a block' do
-        it 'returns enumerator' do
+        it 'returns same as original' do
           expect(range.my_each_with_index { |w, i| p i, w }).to eq(range.each_with_index { |w, i| p i, w })
+        end
+      end
+    end
+  end
+  describe '#my_select' do
+    context 'using it with array' do
+      context 'without block' do
+        it 'returns enumerator' do
+          expect(array.my_select).to be_kind_of(Enumerator)
+        end
+      end
+      context 'with a block' do
+        it 'returns same as original' do
+          expect(array.my_select { |w| w.even? }).to eq(array.select { |w| w.even? })
+        end
+      end
+    end
+    context 'using it with hash' do
+      context 'without block' do
+        it 'returns enumerator' do
+          expect(hash.my_select).to be_kind_of(Enumerator)
+        end
+      end
+      context 'with a block' do
+        it 'returns same as original' do
+          expect(hash.my_select { |k,v| v>'1' }).to eq(hash.select { |k,v| v>'1' })
+        end
+      end
+    end
+    context 'using it with range' do
+      context 'without block' do
+        it 'returns enumerator' do
+          expect(range.my_select).to be_kind_of(Enumerator)
+        end
+      end
+      context 'with a block' do
+        it 'returns same as original' do
+          expect(range.my_select { |w| w.even? }).to eq(range.select { |w| w.even? })
         end
       end
     end
