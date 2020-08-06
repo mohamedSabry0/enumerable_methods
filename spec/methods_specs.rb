@@ -13,7 +13,69 @@ describe Enumerable do
       end
       context 'with a block' do
         it 'returns enumerator' do
-          expect(array.my_each { |i| puts i }).to eq(array.each { |i| puts i })
+          expect(array.my_each { |i| p i }).to eq(array.each { |i| p i })
+        end
+      end
+    end
+    context 'using it with hash' do
+      context 'without block' do
+        it 'returns enumerator' do
+          expect(hash.my_each).to be_kind_of(Enumerator)
+        end
+      end
+      context 'with a block' do
+        it 'returns enumerator' do
+          expect(hash.my_each { |i| p i }).to eq(hash.each { |i| p i })
+        end
+      end
+    end
+    context 'using it with range' do
+      context 'without block' do
+        it 'returns enumerator' do
+          expect(range.my_each).to be_kind_of(Enumerator)
+        end
+      end
+      context 'with a block' do
+        it 'returns enumerator' do
+          expect(range.my_each { |i| p i }).to eq(range.each { |i| p i })
+        end
+      end
+    end
+  end
+  describe '#my_each_with_index' do
+    context 'using it with array' do
+      context 'without block' do
+        it 'returns enumerator' do
+          expect(array.my_each_with_index).to be_kind_of(Enumerator)
+        end
+      end
+      context 'with a block' do
+        it 'returns enumerator' do
+          expect(array.my_each_with_index { |w, i| p i, w }).to eq(array.each_with_index { |w, i| p i, w })
+        end
+      end
+    end
+    context 'using it with hash' do
+      context 'without block' do
+        it 'returns enumerator' do
+          expect(hash.my_each_with_index).to be_kind_of(Enumerator)
+        end
+      end
+      context 'with a block' do
+        it 'returns enumerator' do
+          expect(hash.my_each_with_index { |w, i| p i, w }).to eq(hash.each_with_index { |w, i| p i, w })
+        end
+      end
+    end
+    context 'using it with range' do
+      context 'without block' do
+        it 'returns enumerator' do
+          expect(range.my_each_with_index).to be_kind_of(Enumerator)
+        end
+      end
+      context 'with a block' do
+        it 'returns enumerator' do
+          expect(range.my_each_with_index { |w, i| p i, w }).to eq(range.each_with_index { |w, i| p i, w })
         end
       end
     end
