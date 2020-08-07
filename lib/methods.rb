@@ -53,15 +53,25 @@ module Enumerable
 
   def my_select
     if block_given?
-      new_array = []
-      current_index = 0
-      my_each do |item|
-        if yield(item)
-          new_array[current_index] = item
-          current_index += 1
+      if self.class == Hash
+        new_hash = {}
+        my_each do |item|
+          if yield(item)
+            new_hash[item[0]] = item[1]
+          end
         end
+        new_hash
+      else
+        new_array = []
+        current_index = 0
+        my_each do |item|
+          if yield(item)
+            new_array[current_index] = item
+            current_index += 1
+          end
+        end
+        new_array
       end
-      new_array
     else
       to_enum(:my_select)
     end
